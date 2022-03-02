@@ -3,7 +3,7 @@ from Analysis import Analysis
 
 
 def main():
-    df = pd.read_excel('Data/Belgorod Demographics.xlsx', header=1)
+    df = pd.read_excel('Data/Belgorod Demographics.xlsx', header=1, sheet_name='Белгородская область')
     data = Analysis(df)
 
     print('Исследование демографической ситуации в Белгородской области',
@@ -31,6 +31,30 @@ def main():
                                           'Численность населения старше трудоспособного возраста')
     print(f'Средний процент трудоспособного населения: {round(working_heroes_percent.mean(), 2)}%')
     print(f'Стандртное оклонение трудоспособного населения: {round(working_heroes_percent.std(), 2)}%')
+
+    print('\n...............................................\n')
+    df = pd.read_excel('Data/Belgorod Demographics.xlsx', header=1, sheet_name='Курская область')
+    data = Analysis(df)
+
+    print('Исследование демографической ситуации в Белгородской области',
+          end='\n...............................................\n')
+
+    print(f'Средний показатель общей численности населения: {data.mean("Общая численность населения")}', end='\n')
+    print(f'Ст. откл. общей численности населения: {data.st_dev("Общая численность населения")}', end='\n')
+
+    born_woman_percent = data.percent("Число родившихся за год (женщины)", "Число родившихся за год (мужчины)")
+    dead_woman_percent = data.percent("Число умерших за год (женщины)", "Число умерших за год (мужчины)")
+    print(
+        f'Средний за 10 лет процент родившихся женщин: {round(born_woman_percent.mean(), 2)}%',
+        end='\n')
+    print(
+        f'Средний за 10 лет процент умерших женщин: {round(dead_woman_percent.mean(), 2)}%',
+        end='\n')
+
+    print(data.correlation('Общая численность населения', 'Число родившихся за год (женщины)',
+                           'Число родившихся за год (мужчины)',
+                           'Число умерших за год (женщины)', 'Число умерших за год (мужчины)', 'Число прибывших',
+                           'Число выбывших'))
 
 
 if __name__ == '__main__':
